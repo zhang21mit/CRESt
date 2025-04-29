@@ -1,0 +1,1 @@
+"{\"target_type\": \"strip_sample_stage\", \"substrate_thickness\": 0.19, \"sample_vol\": 25, \"unit_vol\": 25, \"repeat\": 5, \"direction\": \"x\", \"pause\": 10, \"exp_name\": \"acidic_oer_IrRuNi\", \"simulate\": false}"
