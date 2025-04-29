@@ -1,2 +1,2 @@
 # CRESt
-Automated robotic platform for conducting electrochemical reactions at MIT
+Copilot for Real-world Experimental Scientist (CRESt), an automated robotic platform for conducting electrochemical reactions at MIT
