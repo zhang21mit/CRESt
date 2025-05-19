@@ -5,37 +5,6 @@ This repository contains a Jupyter notebook (`run_ot2_experiment.ipynb`) that pr
 
 ---
 
-## Repository Layout
-```
-.
-├── notebooks/
-│   └── run_ot2_experiment.ipynb  # ← this notebook
-├── liquid_handling_robot/
-│   ├── __init__.py
-│   └── ot2_env.py
-├── utils/
-│   └── utils.py
-├── tasks/
-│   ├── DFFC_8D_4/
-│   │   ├── default.yaml
-│   │   └── ...
-│   └── ...
-└── requirements.txt
-```
-
----
-
-## Prerequisites
-- **Python ≥ 3.9** (tested with 3.10)
-- **Opentrons API 7.x** (`opentrons==7.*`)
-- Local copy of this repository (`liquid_handling_robot`, `utils`, `tasks`)
-- Network‑connected OT‑2 running firmware 7.x or newer
-- Jupyter Notebook / JupyterLab
-
-> **Tip** The robot and host computer must be on the same subnet. Verify connectivity with `ping` before running protocols.
-
----
-
 ## Quick Start
 1. **Clone & create environment**
    ```bash
