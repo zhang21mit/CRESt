@@ -1,78 +1,15 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
+import argparse
 import joblib
-
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
-
-from sklearn.decomposition import PCA
-
-#rf=joblib.load("HEA.joblib")
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-
-
-a=pd.read_excel('Data S3.xlsx')
-
-ab=a['abandoned'].to_numpy()!=1
-y=a['max_power'].to_numpy()
-
-a1=a[['Pd','Pt','Cu','Au','Ir','Ce','Nb','Cr']].to_numpy()
+# Unused imports (matplotlib, pandas, PCA) have been removed.
+from sklearn.ensemble import GradientBoostingRegressor
+from bayes_opt import BayesianOptimization, UtilityFunction
 from sklearn.decomposition import PCA
-
-pca = PCA()
-pca.fit(a1[ab])
-
-
-a1=a1[ab]
-y=y[ab]
-
-#plt.plot(pca.explained_variance_ratio_)
-
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
-
-
-
-rf =joblib.load("rf.pkl")
-
-X_train, X_test, y_train, y_test = train_test_split(a1, y, test_size=0.2, random_state=0)
-#rf = GradientBoostingRegressor(n_estimators=1024, random_state=0, learning_rate=0.8e-2,verbose=1)
-# 訓練模型
-#rf.fit(X_train, y_train)
-
-y_pred = rf.predict(X_test)
-
-# 計算均方誤差
-
-print(np.abs(y_test-y_pred).mean())
-print(np.corrcoef(y_test,y_pred)[0,1])
-y_pred = rf.predict(a1)
-
-print(max(y_pred))
-
-
-#%%
-
-iteration=10
-batch_size=20
-
-
-
-import numpy as np
-from bayes_opt import BayesianOptimization
-import matplotlib.pyplot as plt
-from scipy.optimize import NonlinearConstraint
-from bayes_opt import UtilityFunction
 from scipy.optimize import minimize
 
 
-data=np.load('emb.npy')
+# --- Global variable for the loaded model ---
+gbr_model = None 
 
 def normalize_l2(x):
     x = np.array(x)
@@ -85,96 +22,151 @@ def normalize_l2(x):
         norm = np.linalg.norm(x, 2, axis=1, keepdims=True)
         return np.where(norm == 0, x, x / norm)
 
-data=normalize_l2(data[:,:64])#64
-#norm_data=(data-data.mean(axis=0))/data.var(axis=0)**0.5
-
-import numpy as np
-from bayes_opt import BayesianOptimization
-import matplotlib.pyplot as plt
-from scipy.optimize import NonlinearConstraint
-from bayes_opt import UtilityFunction
-from scipy.optimize import minimize
-
-dim=5
 
 
-pca = PCA(n_components=dim)#,whiten=True)
 
-output=pca.fit_transform(data)
-low_bound=output.min(axis=0)
-up_bound=output.max(axis=0)
-print(sum(pca.explained_variance_ratio_))
-#%%
-t=[]
-t1=[]
-def black_box_function(**kwargs):
-    element=[]
-    for x in kwargs:
-        element.append(kwargs[x])
-    element=np.array(element).reshape(1,-1)
-    now=pca.inverse_transform(element).reshape(-1,)
+
+
+
+def main(args):
+    """
+    Main function to run the Bayesian Optimization process.
+    """
+    global gbr_model, N_FEATURES # Allow modification of global variables
+    N_FEATURES = args.n_features
+
+    # --- Load the pre-trained Gradient Boosting Regressor model ---
+    print(f"Loading pre-trained GBR model from: {args.model_file}")
+    try:
+        gbr_model = joblib.load(args.model_file)
+    except FileNotFoundError:
+        print(f"Error: Model file '{args.model_file}' not found.")
+        return
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        return
     
     
+    element_embedding=np.load('emb.npy')
+    element_embedding=normalize_l2(element_embedding[:,:64])
+    pca = PCA(n_components=args.n_reduced_dim)
     
-    def objective_function(x):
-        x=np.array(x).reshape(1,-1)
-        t.append(now)
-        return ((np.dot(x,data[:8])-now)**2).sum()
+    output=pca.fit_transform(element_embedding)
+    low_bound=output.min(axis=0)
+    up_bound=output.max(axis=0)
     
-    
-    x0 = np.zeros(8)+1/8
-    bounds=[]
-    for i in x0:
-        bounds.append((0,1))
+    def black_box_function(**kwargs):
+        element=[]
+        for x in kwargs:
+            element.append(kwargs[x])
+        element=np.array(element).reshape(1,-1)
+        now=pca.inverse_transform(element).reshape(-1,)
         
-    result = minimize(objective_function, x0, method='SLSQP', bounds=bounds)
-    element=np.array(result.x)+1e-8
-    
-    element/=element.sum()
-    return rf.predict(element.reshape(1,-1))[0]
-
-         
-
-
-
-col_log=[]
-
-for seed in range(1,21):
-    pbounds={}
-    for i in range(dim):
-        pbounds['x%d'%(i)]= (low_bound[i],up_bound[i])
-    optimizer = BayesianOptimization(f=None, pbounds=pbounds, verbose=0, random_state=seed,allow_duplicate_points=True)
-    
-    acquisition_function = UtilityFunction(kind="ucb",kappa=1.5)
-    
-    count=0
-    
-    log=[]
-    for _ in range(iteration):
-        in_log=[]
-        in_ans=[]
-        for _ in range(batch_size):
-            
-            next_point = optimizer.suggest(acquisition_function)
-            while next_point in [i['params'] for i in optimizer.res]:
-                next_point = optimizer.suggest(acquisition_function)
-            temp=black_box_function(**next_point)
-            
-            in_ans.append(temp)
-            in_log.append(next_point)
-            log.append(temp)
         
-        for i in range(batch_size):
-            optimizer.register(params=in_log[i], target=in_ans[i])
-        count+=1
-        print('%d : %.3f'%(count,max(in_ans)))
+        
+        def objective_function(x):
+            x=np.array(x).reshape(1,-1)
+            return ((np.dot(x,element_embedding[:8])-now)**2).sum()
+        
+        
+        x0 = np.zeros(8)+1/8
+        bounds=[]
+        for i in x0:
+            bounds.append((0,1))
+            
+        result = minimize(objective_function, x0, method='SLSQP', bounds=bounds)
+        element=np.array(result.x)+1e-8
+        
+        element/=element.sum()
+        return gbr_model.predict(element.reshape(1,-1))[0]
+    
+    
+    
+    # --- Bayesian Optimization ---
+    all_runs_log = [] # To store logs from all seeds
 
-    col_log.append(log)
-    np.save('llm_bo',col_log)
+    for seed in range(1, args.n_seeds + 1):
+        print(f"\n--- Starting Optimization for Seed {seed}/{args.n_seeds} ---")
+        current_seed_log = []
+        
+        # Define parameter bounds
+        pbounds={}
+        for i in range(args.n_reduced_dim):
+            pbounds['x%d'%(i)]= (low_bound[i],up_bound[i])
+
+        optimizer = BayesianOptimization(f=None, pbounds=pbounds, verbose=0, random_state=seed,allow_duplicate_points=True)
+        
+        acquisition_function = UtilityFunction(kind="ucb",kappa=1.5)
+
+        
+        for iteration_num in range(args.bo_iterations):
+            batch_targets = []
+            batch_params = []
+            
+            for _ in range(args.bo_batch_size):
+                next_point_to_sample = optimizer.suggest(acquisition_function)
+                
+                # Ensure the suggested point is not a duplicate of an already evaluated point
+                # This prevents re-evaluating the exact same point if suggest() proposes it.
+                attempts = 0
+                max_attempts = 10 # Prevent infinite loop if space is exhausted or too small
+                # Check against optimizer.res which stores all registered points
+                while any(np.allclose(np.array(list(p['params'].values())), np.array(list(next_point_to_sample.values()))) for p in optimizer.res) and attempts < max_attempts:
+                    next_point_to_sample = optimizer.suggest(acquisition_function)
+                    attempts += 1
+                
+                if attempts == max_attempts and any(np.allclose(np.array(list(p['params'].values())), np.array(list(next_point_to_sample.values()))) for p in optimizer.res):
+                    print("Warning: Could not find a unique point after several attempts. Proceeding with potentially duplicate point or point already evaluated.")
+                
+                
+                
+                target_value=black_box_function(**next_point_to_sample)
+                
+                batch_targets.append(target_value)
+                batch_params.append(next_point_to_sample)
+                current_seed_log.append(target_value)
+            
+            # Register all evaluated points in the batch
+            for i in range(len(batch_params)):
+                optimizer.register(params=batch_params[i], target=batch_targets[i])
+            
+            if batch_targets: # Ensure batch_targets is not empty before calling max()
+                print(f"Seed {seed}, Iteration {iteration_num + 1}/{args.bo_iterations}: Max target in batch = {max(batch_targets):.3f}, Best overall = {optimizer.max['target']:.3f}")
+            else:
+                print(f"Seed {seed}, Iteration {iteration_num + 1}/{args.bo_iterations}: No points in batch. Best overall = {optimizer.max['target']:.3f if optimizer.max else 'N/A'}")
 
 
+        all_runs_log.append(current_seed_log)
+        print(f"--- Seed {seed} completed. Best target found: {optimizer.max['target']:.3f} ---")
+        print(f"Best parameters: {optimizer.max['params']}")
 
+    # Save the collected logs
+    try:
+        np.save(args.output_file, all_runs_log)
+        print(f"\nAll optimization runs completed. Results saved to: {args.output_file}")
+    except Exception as e:
+        print(f"Error saving results to '{args.output_file}': {e}")
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Bayesian Optimization for Material Composition using Gradient Boosting Regressor")
 
+    parser.add_argument('--model_file', type=str, default='gbr.pkl',
+                        help="Path to the pre-trained GradientBoostingRegressor model file (e.g., 'gbr.pkl').")
+    parser.add_argument('--output_file', type=str, default='result_llm.npy',
+                        help="Path to save the logs from Bayesian Optimization (e.g., 'result_ucb.npy').")
+    parser.add_argument('--n_seeds', type=int, default=1,
+                        help="Number of independent Bayesian Optimization runs (seeds).")
+    parser.add_argument('--bo_iterations', type=int, default=20,
+                        help="Number of Bayesian Optimization iterations per seed.")
+    parser.add_argument('--bo_batch_size', type=int, default=10,
+                        help="Number of points to suggest and evaluate in each BO iteration (batch size).")
+    parser.add_argument('--n_features', type=int, default=8,
+                        help="Number of features (compositional elements) for optimization.")
+    parser.add_argument('--n_reduced_dim', type=int, default=5,
+                        help="Number of dimensions for optimization.")
+    # Optional: Add --ucb_kappa if you want to control it from command line
+    # parser.add_argument('--ucb_kappa', type=float, default=2.576, 
+    # help="Kappa value for UCB acquisition function.")
 
-
+    args = parser.parse_args()
+    main(args)

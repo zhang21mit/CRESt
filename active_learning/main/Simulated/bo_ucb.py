@@ -6,7 +6,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from bayes_opt import BayesianOptimization, UtilityFunction
 
 # --- Global variable for the loaded model ---
-gbr_model = None # Renamed from rf_model to gbr_model
+gbr_model = None 
 N_FEATURES = 8   # Default number of features, can be overridden by args
 
 def black_box_function(**kwargs):
@@ -143,7 +143,7 @@ if __name__ == '__main__':
                         help="Number of independent Bayesian Optimization runs (seeds).")
     parser.add_argument('--bo_iterations', type=int, default=20,
                         help="Number of Bayesian Optimization iterations per seed.")
-    parser.add_argument('--bo_batch_size', type=int, default=5,
+    parser.add_argument('--bo_batch_size', type=int, default=10,
                         help="Number of points to suggest and evaluate in each BO iteration (batch size).")
     parser.add_argument('--n_features', type=int, default=8,
                         help="Number of features (compositional elements) for optimization.")
