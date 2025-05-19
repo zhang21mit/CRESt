@@ -115,28 +115,5 @@ hyperlapse_video(raw_path="/media/li/HDD/ot2_recordings/raw",
                  speed=20)  # 20× real‑time
 ```
 
----
 
-## Troubleshooting
-| Symptom | Possible Cause | Fix |
-|---------|----------------|-----|
-| `ModuleNotFoundError: liquid_handling_robot` | Package not on `PYTHONPATH` | Run `pip install -e .` or add repo root to Python path |
-| "Robot not connected" | Wrong IP / firmware mismatch | Check network, restart OT‑2, verify `opentrons` client version |
-| Deck calibration error | Labware definitions changed | Rerun Opentrons deck calibration & labware calibration |
 
----
-
-## License
-This project is licensed under the MIT License. See `LICENSE` for details.
-
-## Authors
-- **Zhen Zhang** — Electrochemical Automation Lab  
-- Contributors: Chu Li, Y. Honda
-
-Please cite this work as:  
-> Zhang, Z. *et al.* "Automated High‑Throughput Electrochemical Catalyst Screening with an Opentrons OT‑2." (2025).
-
----
-
-## Acknowledgements
-Development supported by the National Science Foundation (NSF Award #XXXXXXX). Opentrons open‑source hardware and software provided the foundation for this workflow.
