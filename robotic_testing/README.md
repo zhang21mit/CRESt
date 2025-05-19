@@ -1,4 +1,4 @@
-# Alkaline Platform 270 – Robotic Catalyst Testing
+# Robotic Catalyst Testing
 
 ## Overview
 This repository provides a Jupyter notebook (`alkaline_platform_270.ipynb`) that orchestrates a **six‑axis robotic arm**, liquid‑handling peripherals, and an electrochemical workstation to enable fully‑automated, high‑throughput screening of alkaline OER catalysts.  The workflow is powered by the in‑house `robotic_testing` Python package and exposes a **single‑line API** (`init_alkaline_platform_270`) that spins up the complete experimental stack—robot, pumps, furnace, potentiostat, and data pipeline.
