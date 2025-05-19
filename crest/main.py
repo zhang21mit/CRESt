@@ -5,9 +5,7 @@ from tqdm import tqdm
 import time 
 #%%
 
-phenom = ppi.Phenom( 'MVE092827-20102-F',
- 'MVE09282720102F',
- '8RZ9C72BYK74')
+phenom = ppi.Phenom( 'xxxxYourPhenomAPIxxxx')
 #phenom.SemAutoContrastBrightness() 
 
 #%%
