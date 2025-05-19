@@ -5,57 +5,6 @@ This repository provides a Jupyter notebook (`alkaline_platform_270.ipynb`) that
 
 ---
 
-## Repository Layout
-```
-.
-├── notebooks/
-│   └── alkaline_platform_270.ipynb  # ← this notebook
-├── robotic_testing/
-│   ├── platforms/
-│   │   ├── __init__.py
-│   │   └── alkaline_platform_270.py
-│   ├── arm/
-│   │   ├── gripper_driver.py
-│   │   └── motion_primitives.py
-│   ├── data_pipeline/
-│   │   └── analysis.py
-│   └── utils/
-│       └── config.py
-└── requirements.txt
-```
-
----
-
-## Hardware Requirements
-| Subsystem | Model | Notes |
-|-----------|-------|-------|
-| **Robot arm** | Dorna 2 / Dobot M1 (6‑DOF) | End‑effector fitted with 2‑finger gripper |
-| **Potentiostat** | Bio‑Logic VSP‑300 | Ethernet control |
-| **Pump rack** | Tecan Cavro XLP | Addressed via RS‑485‑USB |
-| **Flask station** | Custom 270‑position carousel | 3‑neck glass flasks |
-| **Vision** | Intel RealSense D435 | Depth camera for pose correction |
-
-Ensure all devices are on the same LAN segment and reachable from the host PC.
-
----
-
-## Software Prerequisites
-- **Python ≥ 3.9** (tested with 3.11)
-- `robotic_testing` (this repo) – install editable
-- `pyserial`, `opencv‑python`, `scipy`, `pandas`, `matplotlib`
-- **Vendor SDKs**  
-  - Dorna API v3  
-  - Bio‑Logic EC‑Lab SDK
-
-```bash
-conda create -n rtest python=3.9
-conda activate rtest
-pip install -r requirements.txt
-pip install -e .   # installs robotic_testing in editable mode
-```
-
----
-
 ## Quick Start
 
 1. **Connect hardware & export IPs**
