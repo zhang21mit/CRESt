@@ -16,6 +16,7 @@ To demonstrate the utility of such features, these embeddings were used in conju
 <img width="800" alt="portfolio_view" src="https://raw.githubusercontent.com/zhang21mit/CRESt/main/active_learning/main/Simulated/overall.png">
 The figure above illustrates the comparative results of Knowledge-Augmented Bayesian Optimization (KABO) and Bayesian Optimization with Policy Improvement Constraints (BOPIC) in a simulated environment. To ensure a fair comparison, all experiments were conducted under the same standards: Bayesian optimization iterations (bo_iterations) were set to 20, and the batch size (bo_batch_size) was set to 10. Each configuration was run for 20 repetitions, and the results were then plotted to generate the figure shown. The detailed experimental result data has been stored in the result folder. 
 
-
+3.  ** Experimental data:
+The log of experimental data for running the active learning algorithms could be found in active_learning/main/Data_AL.
 
 
