@@ -1,7 +1,7 @@
 # OT-2 Experiment Runner
 
 ## Overview
-This repository contains a Jupyter notebook (`run_ot2_experiment.ipynb`) that provides a high-level interface for executing predefined liquid‑handling workflows on an **Opentrons OT‑2** robot. The notebook wraps the custom `liquid_handling_robot.ot2_env` API and pulls task definitions through `utils.utils.get_tasks`, enabling rapid and reproducible execution of complex pipetting protocols used in electrochemical catalyst screening and other high‑throughput experiments.
+This repository contains a Jupyter notebook (`ot2_launcher_template.ipynb`) that provides a high-level interface for executing predefined liquid‑handling workflows on an **Opentrons OT‑2** robot. The notebook wraps the custom `liquid_handling_robot.ot2_env` API and pulls task definitions through `utils.utils.get_tasks`, enabling rapid and reproducible execution of complex pipetting protocols used in electrochemical catalyst screening and other high‑throughput experiments.
 
 ---
 
