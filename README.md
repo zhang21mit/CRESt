@@ -3,6 +3,8 @@ Copilot for Real-world Experimental Scientist (CRESt), an automated robotic plat
 
 The functionality of each file is listed as below:
 
+We leverage CallingGPT to control all functions for the automated electrochemical platform. These files could be located in CallingGPT, and interface.
+
 The active learning algorithm files could be located in active_learning.
 
 Automated SEM control and image analysis could be located in crest.
