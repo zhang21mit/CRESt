@@ -10,8 +10,8 @@ This repository provides a Jupyter notebook (`alkaline_platform_270.ipynb`) that
 1. **Connect hardware & export IPs**
 
    ```bash
-   export ROBOT_IP=192.168.1.20
-   export POTENTIOSTAT_IP=192.168.1.30
+   export ROBOT_IP=192.xxx
+   export POTENTIOSTAT_IP=192.xxx
    ```
 
 2. **Launch the notebook**
