@@ -11,4 +11,4 @@ The functionality of each file is listed as below:
 6. The Xarm for automated electrochemical testing files could be located in robotic_testing.
 7. The automation of controlling the BioLogic software for electrochemical testing with various testing protocols and analysis methods could be located in software_control.
 
-For running the active learning algorithms, the users could follow the instructions in active_learning to run three different active learning algorithms. For controlling the hardware, the users need to have these hardware in the lab or install virtual machines to run the codes. 
+For running the active learning algorithms, the users could follow the instructions in active_learning/main/README to run three different active learning algorithms. For controlling the hardware, the users need to have these hardware in the lab or install virtual machines to run the codes. 
