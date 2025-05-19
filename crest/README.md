@@ -35,9 +35,9 @@ Each capture **auto‑focuses** and optionally **adds a data bar** before saving
 
    ```python
    phenom = ppi.Phenom(
-       "MVE092827-20102-F",    # instrument name
-       "MVE09282720102F",      # serial
-       "8RZ9C72BYK74",         # API key
+       "xxx",    # instrument name
+       "xxx",      # serial
+       "xxx",         # API key
    )
    ```
 
