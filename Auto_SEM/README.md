@@ -76,7 +76,7 @@ ppi.Save(acqWithDatabar, "folder/filename.tiff")
 
 ---
 
-## Customisation
+## Customization
 
 | Variable                | Purpose                                 |
 |-------------------------|-----------------------------------------|
@@ -87,6 +87,10 @@ ppi.Save(acqWithDatabar, "folder/filename.tiff")
 | `detector`              | `ppi.DetectorMode.All` ↔ SE/BSE         |
 
 Feel free to modify these before running or expose them as CLI arguments.
+
+## Example
+
+An example of stitched SEM image is given, with google drive link provided.
 
 ---
 
