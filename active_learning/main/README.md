@@ -17,4 +17,4 @@ To demonstrate the utility of such features, these embeddings were used in conju
 The figure above illustrates the comparative results of Knowledge-Augmented Bayesian Optimization (KABO) and Bayesian Optimization with Policy Improvement Constraints (BOPIC) in a simulated environment. To ensure a fair comparison, all experiments were conducted under the same standards: Bayesian optimization iterations (bo_iterations) were set to 20, and the batch size (bo_batch_size) was set to 10. Each configuration was run for 20 repetitions, and the results were then plotted to generate the figure shown. The detailed experimental result data has been stored in the result folder. 
 
 3.  **(Experiments) Experimental data with CRESt for catalyst discovery**:
-    * All experimental data related to this project could be found in Data_AL_1-3.
+    * All experimental data related to this project could be found in Data_AL_1-3. Data_AL_1 is for the early-stage testing of ternary catalysts (Pd-Pt-Cu), Data_AL_2 is for the testing of octonary catalysts (Pd-Pt-Cu-Sn-Ni-Co-Au-Pr) and (Pd-Pt-Cu-Au-Ru-Ce-Bi-Sn). Data_AL_3 is for the testing of octonary catalysts (Pd-Pt-Cu-Au-Ir-Ce-Nb-Cr).
